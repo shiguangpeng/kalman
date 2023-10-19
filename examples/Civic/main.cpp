@@ -28,6 +28,7 @@ using namespace std;
 using namespace Eigen;
 
 int main(int argc, char *argv[]) {
+    // todo: 接入数据后循环即可求解，可输入的参数作为
     /**
      * 可控参数列表
      * */
