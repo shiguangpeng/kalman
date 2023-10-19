@@ -46,21 +46,21 @@ namespace Kalman {
     public:
         //! System state type
         typedef StateType State;
-        
+
         //! Measurement vector type
         typedef MeasurementType Measurement;
-        
+
     public:
         /**
          * Measurement Model Function h
-         * 
+         *
          * Predicts the estimated measurement value given the current state estimate x
          */
         virtual Measurement h(const State& x) const = 0;
-        
+
     protected:
-        MeasurementModel() {}
-        virtual ~MeasurementModel() {}
+        MeasurementModel() = default;
+        virtual ~MeasurementModel() = default;
     };
 }
 
