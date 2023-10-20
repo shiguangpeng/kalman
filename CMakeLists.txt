@@ -10,7 +10,7 @@ set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_
 
 include(CTest)
 
-set(KALMAN_CXX_FLAGS "-std=c++11")
+set(KALMAN_CXX_FLAGS "-std=c++14")
 
 option(KALMAN_BUILD_EXAMPLES "Build the Kalman examples" ON)
 
@@ -75,6 +75,9 @@ set(TESTS
         test/UnscentedKalmanFilterBase.cpp
         test/UnscentedKalmanFilter.cpp
         test/SquareRootUnscentedKalmanFilter.cpp
+
+        # CSM测试类
+        test/CSMeasurementModel.cpp
 
         # Utils
         test/StandardBase.cpp

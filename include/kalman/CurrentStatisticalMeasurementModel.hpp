@@ -7,35 +7,55 @@
 
 #include "MeasurementModel.hpp"
 
+namespace Kalman
+{
 
-namespace Kalman {
+/**
+ * @brief observation equation extends MeasurementModel\b
+ *
+ * @tparam T data types
+ * @tparam StateType Kalman::Matrix class
+ * @tparam MeasurementType Kalman::Matrix class
+ * @tparam CovarianceBase covariance class
+ * @tparam R Matrix's Row
+ * @tparam C Matrix's Col
+ */
+	template<typename T, class StateType, class MeasurementType, template<class> class CovarianceBase = StandardBase, int R = 2, int C = 3>
+	class CurrentStatisticMeasurementModel : public MeasurementModel<StateType, MeasurementType, CovarianceBase>
+	{
+	 public:
+		typedef MeasurementModel<StateType, MeasurementType, CovarianceBase> Base;
+		using typename Base::State;
+		using typename Base::Measurement;
 
-    /**继承MeasurementModel，实现量测模型*/
-    template<typename T, class StateType, class MeasurementType, template<class> class CovarianceBase = StandardBase, int R=2, int C=3>
-    class CurrentStatisticMeasurementModel : public MeasurementModel<StateType, MeasurementType, CovarianceBase> {
-    public:
-        typedef MeasurementModel<StateType, MeasurementType, CovarianceBase> Base;
-        using typename Base::State;
-        using typename Base::Measurement;
-        Kalman::Matrix<T, R, C> H;
-        Kalman::Matrix<T, R, C> V;
+		Kalman::Matrix<T, R, C> H;
+		Kalman::Matrix<T, R, R> V;
 
-    public:
-        // 初始化
-        CurrentStatisticMeasurementModel() {
-            this->H << 1, 0, 0, 0, 1, 0;
-            this->V << V.Random(R, C);
-        }
-        // 重写virtual方法，产生观测矩阵，特性是Kalman::Vector
-        Measurement h(const State &x) const override {
+	 public:
+		CurrentStatisticMeasurementModel() = default;
 
-            return H * x + V;
-        }
+		/**
+		 *
+		 * @param H Observation Matrix
+		 * @param V Gaussian noise Matrix
+		 */
+		CurrentStatisticMeasurementModel(const Kalman::Matrix<T, R, C>& H,
+				const Kalman::Matrix<T, R, R>& V)
+		{
+			// this->H << 1, 0, 0, 0, 1, 0;
+			// this->V << V.Random(R, C);
+			this->H << H;
+			this->V << V;
+		}
 
-    protected:
-        // todo:
-        ~CurrentStatisticMeasurementModel() override = default;
-    };
+		Measurement h(const State& x) const override
+		{
+			return this->H * x + this->V;
+		}
+
+	 public:
+		~CurrentStatisticMeasurementModel() override = default;
+	};
 
 }// namespace Kalman
 
